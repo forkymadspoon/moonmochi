@@ -4,23 +4,26 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>MoonMochi Café — Small bites. Big moon energy.</title>
-<meta name="description" content="MoonMochi Café — handmade mochi, dreamy drinks and cosmic café moments. A fictional café used as a Meta Pixel training environment." />
+<meta name="description" content="MoonMochi Café — handmade mochi, dreamy drinks and cosmic café moments. A fictional demo café used for testing." />
 
 <!-- ==========================================================================
-     MoonMochi Café — Meta Pixel training environment
+     MoonMochi Café — fictional demo site
      --------------------------------------------------------------------------
      FICTIONAL DEMO SITE. All products, prices, carts and checkouts below are
      make-believe. No payment is processed and no personal data is collected.
 
-     STEP 1 — PASTE YOUR PIXEL ID BELOW.
-     Replace the string 'PASTE_YOUR_PIXEL_ID_HERE' with your numeric Meta Pixel
-     (or Dataset) ID, e.g. '123456789012345'.
+     PIXEL ID — currently LIVE on 1073552061825203.
+     To point this at a different Pixel, change the ID below. To go back to
+     demo mode (nothing sent to Meta), put back 'PASTE_YOUR_PIXEL_ID_HERE'.
 
-     WHY THE PIXEL STAYS INACTIVE:
-     While the placeholder is unchanged, the site runs in DEMO MODE. fbevents.js
+     DEMO MODE vs LIVE MODE:
+     Whenever the ID is not all digits, the site runs in DEMO MODE: fbevents.js
      is never downloaded, fbq() is never defined, and nothing is transmitted to
-     Meta. Every event is logged to the DevTools console instead, so you can
-     rehearse the full event map before touching a real Pixel.
+     Meta — every event is logged to the DevTools console instead.
+
+     NOTE: the base loader below is the ONLY copy of the Meta Pixel base code on
+     this page. Do not paste the snippet from the events dashboard in as well, or every
+     event will be counted twice.
 
      SWAPPING IDs WITHOUT A REDEPLOY:
      Once the page is on GitHub Pages you can point it at a different Pixel with
@@ -29,7 +32,7 @@
      ========================================================================== -->
 <script>
   /* >>> PASTE YOUR PIXEL ID HERE <<< */
-  window.MOONMOCHI_PIXEL_ID = 'PASTE_YOUR_PIXEL_ID_HERE';
+  window.MOONMOCHI_PIXEL_ID = '1073552061825203';
 
   /* Optional ?pixel= override, remembered in localStorage for this browser.
      Handy on a hosted page: test several Pixels without editing and re-pushing. */
@@ -56,7 +59,7 @@
   window.MOONMOCHI_PIXEL_VALID = /^[0-9]{8,25}$/.test(String(window.MOONMOCHI_PIXEL_ID || '').trim());
 
   /* ------------------------------------------------------------------------
-     TRAINING TOGGLES — both read here because they must be known BEFORE
+     OPTIONAL TOGGLES — both read here because they must be known BEFORE
      fbq('init', ...) runs. Both default to OFF / not-yet-answered.
      ------------------------------------------------------------------------ */
   function mmRead(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
@@ -87,7 +90,7 @@
        1. base snippet  2. consent revoke/grant  3. init  4. track PageView
      With consent revoked the Pixel holds events instead of sending them; they
      flush when you accept the banner. That is the exact behaviour to reproduce
-     when a site "has the Pixel installed" but Events Manager sees nothing.
+     when a site "has tracking installed" but the dashboard sees nothing.
      ========================================================================== -->
 <script>
 if (window.MOONMOCHI_PIXEL_VALID) {
@@ -116,7 +119,7 @@ if (window.MOONMOCHI_PIXEL_VALID) {
 }
 </script>
 <noscript><img height="1" width="1" style="display:none" alt=""
-  src="https://www.facebook.com/tr?id=0&ev=PageView&noscript=1" /></noscript>
+  src="https://www.facebook.com/tr?id=1073552061825203&ev=PageView&noscript=1" /></noscript>
 <!-- End Meta Pixel base loader -->
 
 <style>
@@ -345,7 +348,7 @@ if (window.MOONMOCHI_PIXEL_VALID) {
   .mode-line.live{background:#c9f5e0; color:#12603f}
   code{font-family:ui-monospace,Menlo,monospace; background:rgba(185,164,245,.22); padding:.1em .4em; border-radius:6px; font-size:.9em}
 
-  /* ---------- training toggles + break-it panel ---------- */
+  /* ---------- toggles + break-it panel ---------- */
   .lab-split{display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:1.2rem}
   .subcard{
     background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); padding:1.5rem;
@@ -560,7 +563,7 @@ if (window.MOONMOCHI_PIXEL_VALID) {
         <button class="btn btn-primary" id="checkoutBtn" disabled>Begin checkout 🚀</button>
       </div>
       <div>
-        <p class="note">🌙 <strong>Fictional café.</strong> This is a training sandbox. No payment is processed, no order is placed and nothing you type is stored or transmitted.</p>
+        <p class="note">🌙 <strong>Fictional café.</strong> This is a demo site. No payment is processed, no order is placed and nothing you type is stored or transmitted.</p>
         <p class="muted" style="font-size:.9rem;margin-top:1rem">Checkout fires <code>InitiateCheckout</code>; confirming the dreamy receipt fires <code>Purchase</code> exactly once per order.</p>
       </div>
     </div>
@@ -568,15 +571,15 @@ if (window.MOONMOCHI_PIXEL_VALID) {
 </section>
 
 <!-- ========================= MANUAL EVENT TRIGGERS =========================
-     Plain CTAs that fire one event each, so you can test with Meta Pixel Helper,
-     Events Manager Test Events and Chrome DevTools directly.
+     Plain CTAs that fire one event each, for testing with a pixel-helper
+     extension, the events dashboard, or Chrome DevTools directly.
      ========================================================================= -->
 <section class="triggers" id="events">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">🛰️ Event triggers</span>
       <h2>Fire an event.</h2>
-      <p class="muted">Each button sends exactly one event. Watch them land in Meta Ads Data Advisor, Events Manager &rarr; Test Events, or the DevTools Network tab (filter for <code>tr/?</code>).</p>
+      <p class="muted">Each button sends exactly one event. Watch them land in your browser&rsquo;s Network tab (filter for <code>tr/?</code>) or the console.</p>
     </div>
 
     <div class="trigger-card">
@@ -616,8 +619,8 @@ if (window.MOONMOCHI_PIXEL_VALID) {
     <div class="lab-split">
       <!-- ---------- Advanced Matching (fictional data, opt-in) ---------- -->
       <div class="subcard">
-        <h3>🔐 Advanced Matching</h3>
-        <p>Off by default. Turn it on to make the <em>Advanced Matching</em> panel in Ads Data Advisor populate and to move <em>Event Match Quality</em> in Events Manager.</p>
+        <h3>🔐 Customer data matching</h3>
+        <p>Off by default. Turn it on to attach hashed customer details to each event, so you can see how match quality is reported.</p>
         <label class="switch">
           <input type="checkbox" id="amToggle" />
           <span class="track"></span>
@@ -626,16 +629,16 @@ if (window.MOONMOCHI_PIXEL_VALID) {
         <div class="kv" id="amPreview"></div>
         <p class="fineprint">
           ⚠️ Every value is invented test data on <code>example.com</code>. <strong>Never put a real person's details here</strong> —
-          this is a public page. The Pixel normalises and SHA-256 hashes these values in your browser before sending, so they are
-          passed as <strong>plain text</strong>; pre-hashing them yourself would double-hash and break matching.
-          Toggling reloads the page, because Advanced Matching is applied at <code>fbq('init', …)</code>.
+          this is a public page. The tracking library normalises and SHA-256 hashes these values in your browser before sending, so they
+          are passed as <strong>plain text</strong>; pre-hashing them yourself would double-hash and break matching.
+          Toggling reloads the page, because this is applied at initialisation.
         </p>
       </div>
 
       <!-- ---------- Break-it scenarios ---------- -->
       <div class="subcard">
         <h3>🐞 Break it on purpose</h3>
-        <p>Each button reproduces one classic symptom. Fire it, then go find it in Ads Data Advisor, Events Manager → Diagnostics, and the Network tab.</p>
+        <p>Each button reproduces one classic symptom. Fire it, then go find it in your browser&rsquo;s Network tab and console.</p>
         <div class="break-grid">
           <button class="break" id="breakMisspelled">
             <b>Misspelled event name</b>
@@ -654,7 +657,7 @@ if (window.MOONMOCHI_PIXEL_VALID) {
             <span>Fires the same <code>Purchase</code> twice, ~300&nbsp;ms apart — the double-counting symptom.</span>
           </button>
         </div>
-        <p class="fineprint" style="margin-top:.9rem">Each one also writes a <code>console.error</code> in DevTools explaining what is wrong and where to spot it.</p>
+        <p class="fineprint" style="margin-top:.9rem">Each one also writes a <code>console.error</code> explaining what is wrong and where to spot it.</p>
       </div>
     </div>
 
@@ -667,7 +670,7 @@ if (window.MOONMOCHI_PIXEL_VALID) {
 
 <footer>
   <div class="wrap">
-    <p><strong>MoonMochi Café</strong> — a fictional café built as a Meta Pixel training environment.<br />
+    <p><strong>MoonMochi Café</strong> — a fictional café built for testing.<br />
     All products, prices, carts and checkouts are make-believe. No payments, no real data. 🌙</p>
   </div>
 </footer>
@@ -691,8 +694,8 @@ if (window.MOONMOCHI_PIXEL_VALID) {
 <!-- Mock consent banner. The Pixel holds all events until this is accepted
      (fbq('consent','revoke') runs before init in the <head>). -->
 <div class="consent" id="consentBar" role="dialog" aria-live="polite" aria-label="Cookie consent">
-  <p>🍪 <strong>A mock consent banner.</strong> Until you accept, the Pixel is set to
-    <code>consent: revoke</code> and holds every event — the classic "Pixel is installed but Events Manager sees nothing" case.</p>
+  <p>🍪 <strong>A mock consent banner.</strong> Until you accept, tracking consent is revoked and every
+    event is held — the classic "tracking is installed but no events arrive" case.</p>
   <div class="consent-actions">
     <button class="btn btn-primary btn-sm" id="consentAccept">Accept</button>
     <button class="btn btn-ghost btn-sm" id="consentDecline">Decline</button>
@@ -781,12 +784,12 @@ if (window.MOONMOCHI_PIXEL_VALID) {
   }
 
   // Mirrors every event to the Chrome DevTools console — inspect it there,
-  // in Meta Pixel Helper, or in the DevTools Network tab (filter: tr/?).
+  // in a pixel-helper extension, or in the DevTools Network tab (filter: tr/?).
   function addLog(eventName, parameters, transport, kind) {
-    var label = transport === 'meta'  ? 'SENT TO META'
+    var label = transport === 'meta'  ? 'SENT'
               : transport === 'held'  ? 'HELD — consent not granted'
               : transport === 'error' ? 'ERROR'
-              : 'DEMO MODE — NOT SENT';
+              : 'TEST MODE — NOT SENT';
     var line = '[MoonMochi] ' + eventName + ' — ' + (kind || 'standard') + ' event — ' + label;
     if (transport === 'error') { console.error(line, parameters || {}); }
     else { console.log(line, parameters || {}, new Date().toISOString()); }
@@ -1001,7 +1004,7 @@ if (window.MOONMOCHI_PIXEL_VALID) {
 
   /* =====================================================================
      7. MANUAL EVENT TRIGGERS
-        One CTA per event, for testing with Pixel Helper / Test Events / DevTools.
+        One CTA per event, for testing with a helper extension / dashboard / DevTools.
         Standard events: ViewContent, AddToCart, Lead, InitiateCheckout, Purchase.
         Custom event: MochiFlavorSelected (see section 6 for the in-flow versions).
      ===================================================================== */
@@ -1010,12 +1013,12 @@ if (window.MOONMOCHI_PIXEL_VALID) {
   function renderMode() {
     var el = $('modeLine');
     el.className = 'mode-line ' + (PIXEL_LIVE ? 'live' : 'demo');
-    var extras = (window.MOONMOCHI_AM_ON ? ' · Advanced Matching ON' : '') +
+    var extras = (window.MOONMOCHI_AM_ON ? ' · customer data matching ON' : '') +
                  (consentGranted() ? '' : ' · ⏸ consent not granted, events held');
     el.textContent = PIXEL_LIVE
-      ? '🟢 Live — Pixel ' + PIXEL_ID + ' (from ' + (window.MOONMOCHI_PIXEL_SOURCE || 'index.html') + ')' + extras
-      : '🟡 Demo mode — nothing is sent to Meta; events log to the DevTools console only. ' +
-        'To go live, paste your Pixel ID into index.html (or add ?pixel=YOUR_ID to the URL).' + extras;
+      ? '🟢 Tracking active — ID ' + PIXEL_ID + ' (from ' + (window.MOONMOCHI_PIXEL_SOURCE || 'index.html') + ')' + extras
+      : '🟡 Test mode — nothing is sent; events log to the browser console only. ' +
+        'To activate, set the ID in index.html (or add ?pixel=YOUR_ID to the URL).' + extras;
   }
 
   function wireTriggers() {
@@ -1094,8 +1097,8 @@ if (window.MOONMOCHI_PIXEL_VALID) {
     console.log('[MoonMochi] consent ' + (decision === 'granted' ? 'grant' : 'revoke') +
                 ' — fbq(\'consent\', \'' + (decision === 'granted' ? 'grant' : 'revoke') + '\')');
     toast(decision === 'granted'
-      ? 'Consent granted 🍪 held events flush to Meta now'
-      : 'Consent declined — the Pixel will hold events');
+      ? 'Consent granted 🍪 held events are sent now'
+      : 'Consent declined — events will be held');
   }
 
   /* =====================================================================
@@ -1107,7 +1110,7 @@ if (window.MOONMOCHI_PIXEL_VALID) {
     $('amPreview').textContent = window.MOONMOCHI_AM_ON
       ? "fbq('init', '" + (PIXEL_LIVE ? PIXEL_ID : '<your-pixel-id>') + "', " +
         JSON.stringify(window.MOONMOCHI_AM_DATA, null, 2) + ')'
-      : "fbq('init', '" + (PIXEL_LIVE ? PIXEL_ID : '<your-pixel-id>') + "')   // no Advanced Matching";
+      : "fbq('init', '" + (PIXEL_LIVE ? PIXEL_ID : '<your-pixel-id>') + "')   // no customer data";
   }
 
   /* =====================================================================
@@ -1123,11 +1126,11 @@ if (window.MOONMOCHI_PIXEL_VALID) {
     $('breakMisspelled').addEventListener('click', function () {
       sendStandard('Purchace', { content_ids: ['MM-BOX-001'], value: 18.80, currency: 'SGD' });
       explain('Misspelled event name: "Purchace"',
-        'Standard event names are case- and spelling-sensitive. "Purchace" is not a standard event, so Meta ' +
-        'records it as a CUSTOM event: it will not count as a conversion, cannot be optimised for, and shows ' +
-        'up as an unexpected custom event in Events Manager. Look for it in Ads Data Advisor — it will not ' +
+        'Standard event names are case- and spelling-sensitive. "Purchace" is not a standard event, so it is ' +
+        'recorded as a CUSTOM event: it will not count as a conversion, cannot be optimised for, and shows ' +
+        'up as an unexpected custom event in your dashboard. Look for it in the browser extension — it will not ' +
         'carry the standard-event badge.');
-      toast('Sent "Purchace" — spot the custom event in Events Manager');
+      toast('Sent "Purchace" — spot the custom event in your dashboard');
     });
 
     // Required parameters missing -> event lands, revenue does not.
@@ -1136,7 +1139,7 @@ if (window.MOONMOCHI_PIXEL_VALID) {
       explain('Purchase without value or currency',
         'Purchase requires `value` (a number) and `currency` (a 3-letter ISO code). Without them the event ' +
         'still arrives, so it looks fine at a glance — but it reports no revenue, ROAS is unmeasurable, and ' +
-        'Events Manager → Diagnostics raises a missing-parameter warning.');
+        'the diagnostics view raises a missing-parameter warning.');
       toast('Sent Purchase with no value/currency');
     });
 
@@ -1146,7 +1149,7 @@ if (window.MOONMOCHI_PIXEL_VALID) {
       explain('Purchase with wrong parameter types',
         'value was sent as the STRING "eighteen-eighty" and currency as the NUMBER 12345. `value` must be a ' +
         'number and `currency` a 3-letter ISO code such as "SGD". Check the Network tab: the request still ' +
-        'goes out (look at cd[value] and cd[currency] in the query string), but Meta cannot use it.');
+        'goes out (look at cd[value] and cd[currency] in the query string), but it cannot be used.');
       toast('Sent Purchase with invalid types — check DevTools');
     });
 
@@ -1158,8 +1161,8 @@ if (window.MOONMOCHI_PIXEL_VALID) {
       explain('Duplicate Purchase',
         'The same Purchase fired twice ~300ms apart, so revenue is double-counted. Real causes: the Pixel ' +
         'snippet installed twice, a confirmation page that reloads or is bookmarked, an SPA re-rendering the ' +
-        'thank-you route, or browser + Conversions API sending the same event without a shared event_id for ' +
-        'deduplication. Ads Data Advisor flags the repeat; Events Manager shows two conversions.');
+        'thank-you route, or browser + server-side sending the same event without a shared event_id for ' +
+        'deduplication. The browser extension flags the repeat; your dashboard shows two conversions.');
       toast('Fired Purchase twice — check for double-counting');
     });
   }
@@ -1193,16 +1196,16 @@ if (window.MOONMOCHI_PIXEL_VALID) {
     mmWrite('moonmochi_am', this.checked ? 'on' : 'off');
     window.MOONMOCHI_AM_ON = this.checked;
     renderAdvancedMatching();
-    toast(this.checked ? 'Advanced Matching on — reloading…' : 'Advanced Matching off — reloading…');
+    toast(this.checked ? 'Customer data matching on — reloading…' : 'Customer data matching off — reloading…');
     setTimeout(function () { window.location.reload(); }, 700);
   });
 
   if (!PIXEL_LIVE) {
-    console.warn('[MoonMochi] DEMO MODE — window.MOONMOCHI_PIXEL_ID is still the placeholder, ' +
-                 'so fbevents.js was never loaded and nothing is sent to Meta. ' +
-                 'Paste a numeric Pixel ID at the top of index.html to go live.');
+    console.warn('[MoonMochi] TEST MODE — window.MOONMOCHI_PIXEL_ID is still the placeholder, ' +
+                 'so the tracking library was never loaded and nothing is sent. ' +
+                 'Set a numeric ID at the top of index.html to activate.');
   } else {
-    console.log('[MoonMochi] LIVE MODE — Pixel ' + PIXEL_ID + ' initialised; PageView sent.');
+    console.log('[MoonMochi] Tracking active — ID ' + PIXEL_ID + ' initialised; PageView sent.');
   }
 
   // Hero CTAs
