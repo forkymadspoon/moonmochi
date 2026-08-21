@@ -16,6 +16,11 @@
      fbq(...) call in the script at the bottom of the file — see "EVENTS".
      ========================================================================== -->
 
+<script>
+  window.MOONMOCHI_PAGEVIEW_ID = (window.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : 'mm-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+</script>     
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -27,7 +32,7 @@ t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '1073552061825203');
-fbq('track', 'PageView');
+fbq('track', 'PageView', {}, {eventID: window.MOONMOCHI_PAGEVIEW_ID});
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1073552061825203&ev=PageView&noscript=1"
@@ -425,7 +430,14 @@ var purchaseFired = false;
 
 function $(id) { return document.getElementById(id); }
 function money(n) { return 'S$' + n.toFixed(2); }
-function log(name, params) { console.log('[MoonMochi] ' + name, params || {}); }
+function log(name, params, eventId) {
+  console.log('[MoonMochi] ' + name, params || {}, eventId ? '· event_id: ' + eventId : '');
+}
+function newEventId() {
+  return (window.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : 'mm-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+}
 
 /* ============================================================================
    EVENTS — every fbq() call on this page is in this section.
@@ -434,12 +446,15 @@ function log(name, params) { console.log('[MoonMochi] ' + name, params || {}); }
    ============================================================================ */
 
 function eventViewContent() {
+  var eventId = newEventId();
   var params = { content_name: 'Lunar Menu', content_category: 'menu' };
-  fbq('track', 'ViewContent', params);
-  log('ViewContent', params);
+  fbq('track', 'ViewContent', params, { eventID: eventId });
+  log('ViewContent', params, eventId);
+  return eventId;
 }
 
 function eventAddToCart(id) {
+  var eventId = newEventId();
   var p = PRODUCTS[id];
   var params = {
     content_name: p.name,
@@ -448,36 +463,45 @@ function eventAddToCart(id) {
     value: p.price,
     currency: 'SGD'
   };
-  fbq('track', 'AddToCart', params);
-  log('AddToCart', params);
+  fbq('track', 'AddToCart', params, { eventID: eventId });
+  log('AddToCart', params, eventId);
 
   // Custom event — only for the mochi products.
   if (p.mochi) { eventMochiFlavorSelected(p.name, 'menu_card'); }
+  return eventId;
 }
 
 function eventLead(method) {
   // Never send the email address itself.
+  var eventId = newEventId();
   var params = { content_name: 'Moon Club signup', method: method };
-  fbq('track', 'Lead', params);
-  log('Lead', params);
+  fbq('track', 'Lead', params, { eventID: eventId });
+  log('Lead', params, eventId);
+  return eventId;
 }
 
 function eventInitiateCheckout(ids, numItems, value) {
+  var eventId = newEventId();
   var params = { contents: ids, num_items: numItems, value: value, currency: 'SGD' };
-  fbq('track', 'InitiateCheckout', params);
-  log('InitiateCheckout', params);
+  fbq('track', 'InitiateCheckout', params, { eventID: eventId });
+  log('InitiateCheckout', params, eventId);
+  return eventId;
 }
 
 function eventPurchase(ids, value) {
+  var eventId = newEventId();
   var params = { content_ids: ids, value: value, currency: 'SGD' };
-  fbq('track', 'Purchase', params);
-  log('Purchase', params);
+  fbq('track', 'Purchase', params, { eventID: eventId });
+  log('Purchase', params, eventId);
+  return eventId;
 }
 
 function eventMochiFlavorSelected(flavor, source) {
+  var eventId = newEventId();
   var params = { flavor: flavor, source: source };
-  fbq('trackCustom', 'MochiFlavorSelected', params);
-  log('MochiFlavorSelected (custom)', params);
+  fbq('trackCustom', 'MochiFlavorSelected', params, { eventID: eventId });
+  log('MochiFlavorSelected (custom)', params, eventId);
+  return eventId;
 }
 
 /* ============================================================================
@@ -522,6 +546,8 @@ function renderCart() {
   $('cartTotal').textContent = money(cartTotal());
   $('checkoutBtn').disabled = cart.length === 0;
 }
+
+log('PageView', {}, window.MOONMOCHI_PAGEVIEW_ID);
 
 function addToCart(id) {
   var line = cart.filter(function (i) { return i.id === id; })[0];
