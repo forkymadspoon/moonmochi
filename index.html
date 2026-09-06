@@ -311,7 +311,7 @@ src="https://www.facebook.com/tr?id=1073552061825203&ev=PageView&noscript=1"
       <p class="muted">Three little constellations of flavour, made fresh each evening in our floating kitchen.</p>
     </div>
     <div class="cards">
-      <article class="card">
+      <article class="card" id="MM-BOX-001">
         <div class="thumb a">🍡</div>
         <span class="sku">MM-BOX-001</span>
         <h3>Stardust Mochi Box</h3>
@@ -319,7 +319,7 @@ src="https://www.facebook.com/tr?id=1073552061825203&ev=PageView&noscript=1"
         <div class="price">S$18.80</div>
         <button class="btn btn-primary" data-add="MM-BOX-001">Add to orbit ✨</button>
       </article>
-      <article class="card">
+      <article class="card" id="MM-DRINK-001">
         <div class="thumb b">🍵</div>
         <span class="sku">MM-DRINK-001</span>
         <h3>Lunar Matcha</h3>
@@ -327,7 +327,7 @@ src="https://www.facebook.com/tr?id=1073552061825203&ev=PageView&noscript=1"
         <div class="price">S$8.50</div>
         <button class="btn btn-primary" data-add="MM-DRINK-001">Add to orbit ✨</button>
       </article>
-      <article class="card">
+      <article class="card" id="MM-CROFFLE-001">
         <div class="thumb c">🧇</div>
         <span class="sku">MM-CROFFLE-001</span>
         <h3>Comet Croffle</h3>
@@ -433,6 +433,11 @@ function money(n) { return 'S$' + n.toFixed(2); }
 function log(name, params, eventId) {
   console.log('[MoonMochi] ' + name, params || {}, eventId ? '· event_id: ' + eventId : '');
 }
+/* A #MM-... anchor means the visitor landed on a specific product. */
+function productFromHash() {
+  var id = (location.hash || '').slice(1);
+  return id in PRODUCTS ? id : 'MM-BOX-001';
+}
 function newEventId() {
   return (window.crypto && crypto.randomUUID)
     ? crypto.randomUUID()
@@ -445,9 +450,17 @@ function newEventId() {
    Custom events:   fbq('trackCustom', 'Name', { ... })
    ============================================================================ */
 
-function eventViewContent() {
+function eventViewContent(id) {
   var eventId = newEventId();
-  var params = { content_name: 'Lunar Menu', content_category: 'menu' };
+  var p = PRODUCTS[id] || PRODUCTS['MM-BOX-001'];
+  var params = {
+    content_name: p.name,
+    content_category: 'menu',
+    content_ids: [id in PRODUCTS ? id : 'MM-BOX-001'],
+    content_type: 'product',
+    value: p.price,
+    currency: 'SGD'
+  };
   fbq('track', 'ViewContent', params, { eventID: eventId });
   log('ViewContent', params, eventId);
   return eventId;
@@ -480,17 +493,28 @@ function eventLead(method) {
   return eventId;
 }
 
-function eventInitiateCheckout(ids, numItems, value) {
+function eventInitiateCheckout(contents, numItems, value) {
   var eventId = newEventId();
-  var params = { contents: ids, num_items: numItems, value: value, currency: 'SGD' };
+  var params = {
+    contents: contents,
+    content_type: 'product',
+    num_items: numItems,
+    value: value,
+    currency: 'SGD'
+  };
   fbq('track', 'InitiateCheckout', params, { eventID: eventId });
   log('InitiateCheckout', params, eventId);
   return eventId;
 }
 
-function eventPurchase(ids, value) {
+function eventPurchase(contents, value) {
   var eventId = newEventId();
-  var params = { content_ids: ids, value: value, currency: 'SGD' };
+  var params = {
+    contents: contents,
+    content_type: 'product',
+    value: value,
+    currency: 'SGD'
+  };
   fbq('track', 'Purchase', params, { eventID: eventId });
   log('Purchase', params, eventId);
   return eventId;
@@ -509,7 +533,14 @@ function eventMochiFlavorSelected(flavor, source) {
    ============================================================================ */
 function cartCount() { return cart.reduce(function (n, i) { return n + i.qty; }, 0); }
 function cartTotal() { return Math.round(cart.reduce(function (n, i) { return n + i.price * i.qty; }, 0) * 100) / 100; }
-function cartIds()   { return cart.map(function (i) { return i.id; }); }
+/* Meta expects `contents` as objects, not bare IDs. */
+function cartContents() {
+  return cart.map(function (i) { return { id: i.id, quantity: i.qty, item_price: i.price }; });
+}
+function contentsFor(id, qty) {
+  var p = PRODUCTS[id];
+  return [{ id: id, quantity: qty || 1, item_price: p.price }];
+}
 
 function renderCart() {
   var list = $('cartList');
@@ -592,8 +623,13 @@ document.querySelectorAll('[data-add]').forEach(function (btn) {
   btn.addEventListener('click', function () { addToCart(btn.getAttribute('data-add')); });
 });
 
+/* Catalog links land on #MM-... — fire ViewContent for that product on arrival. */
+if ((location.hash || '').slice(1) in PRODUCTS) {
+  eventViewContent(productFromHash());
+}
+
 $('exploreBtn').addEventListener('click', function () {
-  eventViewContent();
+  eventViewContent(productFromHash());
   $('menu').scrollIntoView({ behavior: 'smooth' });
 });
 
@@ -614,7 +650,7 @@ $('moonClubBtn').addEventListener('click', function () {
 
 $('checkoutBtn').addEventListener('click', function () {
   if (!cart.length) { return; }
-  eventInitiateCheckout(cartIds(), cartCount(), cartTotal());
+  eventInitiateCheckout(cartContents(), cartCount(), cartTotal());
   openModal({
     icon: '🚀',
     title: 'Confirm your fictional order',
@@ -624,7 +660,7 @@ $('checkoutBtn').addEventListener('click', function () {
     onConfirm: function () {
       if (purchaseFired || !cart.length) { closeModal(); return; }
       var total = cartTotal(), count = cartCount();
-      eventPurchase(cartIds(), total);      // fires once per order
+      eventPurchase(cartContents(), total);      // fires once per order
       purchaseFired = true;
       cart = [];
       renderCart();
@@ -642,19 +678,19 @@ $('checkoutBtn').addEventListener('click', function () {
 });
 
 /* Test-event buttons */
-$('tViewContent').addEventListener('click', function () { eventViewContent(); toast('ViewContent fired 🛰️'); });
+$('tViewContent').addEventListener('click', function () { eventViewContent('MM-BOX-001'); toast('ViewContent fired 🛰️'); });
 $('tAddToCart').addEventListener('click', function () { addToCart('MM-BOX-001'); });
 $('tLead').addEventListener('click', function () { eventLead('test_button'); toast('Lead fired 🛰️'); });
 $('tInitiateCheckout').addEventListener('click', function () {
-  var ids = cart.length ? cartIds() : ['MM-BOX-001'];
+  var contents = cart.length ? cartContents() : contentsFor('MM-BOX-001', 1);
   var val = cart.length ? cartTotal() : 18.80;
-  eventInitiateCheckout(ids, cart.length ? cartCount() : 1, val);
+  eventInitiateCheckout(contents, cart.length ? cartCount() : 1, val);
   toast('InitiateCheckout fired 🛰️');
 });
 $('tPurchase').addEventListener('click', function () {
-  var ids = cart.length ? cartIds() : ['MM-BOX-001'];
+  var contents = cart.length ? cartContents() : contentsFor('MM-BOX-001', 1);
   var val = cart.length ? cartTotal() : 18.80;
-  eventPurchase(ids, val);
+  eventPurchase(contents, val);
   if (cart.length) { cart = []; purchaseFired = false; renderCart(); }
   toast('Purchase fired 🛰️ (fictional — nothing charged)');
 });

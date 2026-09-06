@@ -1,0 +1,4 @@
+id,title,description,availability,condition,price,link,image_link,brand
+MM-BOX-001,Stardust Mochi Box,"Six handmade mochi in strawberry, matcha and black sesame.",in stock,new,18.80 SGD,https://forkymadspoon.github.io/moonmochi/#MM-BOX-001,https://forkymadspoon.github.io/moonmochi/img/MM-BOX-001.png,MoonMochi Café
+MM-DRINK-001,Lunar Matcha,Ceremonial matcha with strawberry moon foam.,in stock,new,8.50 SGD,https://forkymadspoon.github.io/moonmochi/#MM-DRINK-001,https://forkymadspoon.github.io/moonmochi/img/MM-DRINK-001.png,MoonMochi Café
+MM-CROFFLE-001,Comet Croffle,Mochi croffle with vanilla nebula cream and fruit.,in stock,new,12.00 SGD,https://forkymadspoon.github.io/moonmochi/#MM-CROFFLE-001,https://forkymadspoon.github.io/moonmochi/img/MM-CROFFLE-001.png,MoonMochi Café

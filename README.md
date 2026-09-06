@@ -40,12 +40,21 @@ All of them are in one place — the `EVENTS` section of the script at the botto
 One function per event, each a plain call:
 
 ```js
-function eventViewContent() {
-  var params = { content_name: 'Lunar Menu', content_category: 'menu' };
-  fbq('track', 'ViewContent', params);
+function eventViewContent(id) {
+  var p = PRODUCTS[id] || PRODUCTS['MM-BOX-001'];
+  var params = {
+    content_name: p.name, content_category: 'menu',
+    content_ids: [id], content_type: 'product',
+    value: p.price, currency: 'SGD'
+  };
+  fbq('track', 'ViewContent', params, { eventID: newEventId() });
   log('ViewContent', params);
 }
 ```
+
+Every event carries the parameters Meta's Dynamic Ads need to match a catalogue item —
+`content_ids` (or `contents`), `content_type`, `value` and `currency` — plus an `eventID` for
+deduplication. `contents` is an array of objects, `[{ id, quantity, item_price }]`, not bare IDs.
 
 Standard events use `fbq('track', 'Name', params)`. The one custom event uses
 `fbq('trackCustom', 'Name', params)`. To add an event, copy one of those functions and call it from
@@ -56,11 +65,11 @@ a click handler in the `WIRING` section below.
 | Event | Type | Fires when | Parameters |
 |---|---|---|---|
 | `PageView` | standard | page load, from the base code | — |
-| `ViewContent` | standard | "Explore the menu" · test button | `content_name`, `content_category` |
+| `ViewContent` | standard | "Explore the menu" · landing on a `#MM-...` link · test button | `content_name`, `content_category`, `content_ids`, `content_type`, `value`, `currency` |
 | `AddToCart` | standard | any "Add to orbit" · test button | `content_name`, `content_ids`, `content_type`, `value`, `currency` |
 | `Lead` | standard | Moon Club signup · test button | `content_name`, `method` |
-| `InitiateCheckout` | standard | "Begin checkout" with ≥1 item · test button | `contents`, `num_items`, `value`, `currency` |
-| `Purchase` | standard | confirming the fictional checkout · test button | `content_ids`, `value`, `currency` |
+| `InitiateCheckout` | standard | "Begin checkout" with ≥1 item · test button | `contents`, `content_type`, `num_items`, `value`, `currency` |
+| `Purchase` | standard | confirming the fictional checkout · test button | `contents`, `content_type`, `value`, `currency` |
 | `MochiFlavorSelected` | **custom** | a mochi product added to cart · test button | `flavor`, `source` |
 
 `Purchase` in the checkout flow is guarded so it fires once per order. The **Purchase** test button
@@ -77,7 +86,34 @@ double-counting on purpose.
 
 ---
 
-## 3. Test-event buttons
+## 3. The product catalogue
+
+`catalog.csv` is a Meta products feed for the three items, with the nine required columns:
+`id`, `title`, `description`, `availability`, `condition`, `price`, `link`, `image_link`, `brand`.
+Upload it in Commerce Manager under **Catalog → Data Sources**, or point a scheduled feed at
+`https://forkymadspoon.github.io/moonmochi/catalog.csv`.
+
+**The `id` column must equal the `content_ids` the pixel sends** — both are the `MM-*` SKUs. If
+they ever drift, Dynamic Ads silently attributes nothing.
+
+Each card is anchored (`<article class="card" id="MM-BOX-001">`), so `link` points at
+`…/moonmochi/#MM-BOX-001` and landing there fires `ViewContent` for that product.
+
+Images live in `img/<SKU>.png` at 1024×1024 — Meta accepts JPEG and PNG, **not** SVG. The
+editable sources are `img/src/<SKU>.svg`; regenerate a PNG after editing one with:
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu \
+  --screenshot=img/MM-BOX-001.png --window-size=1024,1024 img/src/MM-BOX-001.svg
+```
+
+> Fictional products are fine for a catalogue used to test Dynamic Ads. Don't take this one
+> through Commerce Manager's shop/checkout setup — that goes to commerce review, which expects
+> genuinely purchasable items.
+
+---
+
+## 4. Test-event buttons
 
 The **Fire an event** section has one button per event, so you can trigger each one on demand
 without walking the whole shop flow. Every event is also logged to the console as
@@ -85,7 +121,7 @@ without walking the whole shop flow. Every event is also logged to the console a
 
 ---
 
-## 4. Run and publish
+## 5. Run and publish
 
 Locally — just double-click `index.html`. For anything involving the real network, serve over HTTP:
 
@@ -99,7 +135,7 @@ what the helper extension and test tools expect.
 
 ---
 
-## 5. Troubleshooting
+## 6. Troubleshooting
 
 | Symptom | Check |
 |---|---|
