@@ -164,6 +164,9 @@ src="https://www.facebook.com/tr?id=1073552061825203&ev=PageView&noscript=1"
   .thumb.a{background:radial-gradient(circle at 30% 25%,#fff,var(--pink) 70%)}
   .thumb.b{background:radial-gradient(circle at 30% 25%,#fff,#d5f0d8 70%)}
   .thumb.c{background:radial-gradient(circle at 30% 25%,#fff,var(--blue) 70%)}
+  .thumb.d{background:radial-gradient(circle at 30% 25%,#fff,var(--lav) 70%)}
+  .thumb.e{background:radial-gradient(circle at 30% 25%,#fff,var(--moon) 70%)}
+  .thumb.f{background:radial-gradient(circle at 30% 25%,#fff,#ffe0d0 70%)}
   .card h3{font-size:1.3rem}
   .card .desc{font-size:.96rem; color:var(--ink-soft); flex:1}
   .sku{font-size:.72rem; letter-spacing:.1em; color:var(--lav-ink); font-weight:700; text-transform:uppercase}
@@ -308,7 +311,7 @@ src="https://www.facebook.com/tr?id=1073552061825203&ev=PageView&noscript=1"
     <div class="section-head">
       <span class="eyebrow">🍡 The menu</span>
       <h2>Pick your orbit.</h2>
-      <p class="muted">Three little constellations of flavour, made fresh each evening in our floating kitchen.</p>
+      <p class="muted">Six little constellations of flavour, made fresh each evening in our floating kitchen.</p>
     </div>
     <div class="cards">
       <article class="card" id="MM-BOX-001">
@@ -334,6 +337,30 @@ src="https://www.facebook.com/tr?id=1073552061825203&ev=PageView&noscript=1"
         <p class="desc">Mochi croffle with vanilla nebula cream and fruit.</p>
         <div class="price">S$12.00</div>
         <button class="btn btn-primary" data-add="MM-CROFFLE-001">Add to orbit ✨</button>
+      </article>
+      <article class="card" id="MM-ICE-001">
+        <div class="thumb d">🍨</div>
+        <span class="sku">MM-ICE-001</span>
+        <h3>Aurora Mochi Ice Cream</h3>
+        <p class="desc">Mochi-wrapped ice cream that shifts colour as it melts.</p>
+        <div class="price">S$6.50</div>
+        <button class="btn btn-primary" data-add="MM-ICE-001">Add to orbit ✨</button>
+      </article>
+      <article class="card" id="MM-DRINK-002">
+        <div class="thumb e">🧋</div>
+        <span class="sku">MM-DRINK-002</span>
+        <h3>Meteor Milk Tea</h3>
+        <p class="desc">Brown sugar milk tea with pearls that streak to the bottom.</p>
+        <div class="price">S$7.80</div>
+        <button class="btn btn-primary" data-add="MM-DRINK-002">Add to orbit ✨</button>
+      </article>
+      <article class="card" id="MM-CAKE-001">
+        <div class="thumb f">🍰</div>
+        <span class="sku">MM-CAKE-001</span>
+        <h3>Crater Cheesecake</h3>
+        <p class="desc">Baked yuzu cheesecake with a dusting of crushed biscuit dust.</p>
+        <div class="price">S$9.80</div>
+        <button class="btn btn-primary" data-add="MM-CAKE-001">Add to orbit ✨</button>
       </article>
     </div>
   </div>
@@ -422,7 +449,10 @@ window.fbq = window.fbq || function () {
 var PRODUCTS = {
   'MM-BOX-001':     { name:'Stardust Mochi Box', price:18.80, emoji:'🍡', mochi:true  },
   'MM-DRINK-001':   { name:'Lunar Matcha',       price:8.50,  emoji:'🍵', mochi:false },
-  'MM-CROFFLE-001': { name:'Comet Croffle',      price:12.00, emoji:'🧇', mochi:true  }
+  'MM-CROFFLE-001': { name:'Comet Croffle',      price:12.00, emoji:'🧇', mochi:true  },
+  'MM-ICE-001':     { name:'Aurora Mochi Ice Cream', price:6.50, emoji:'🍨', mochi:true  },
+  'MM-DRINK-002':   { name:'Meteor Milk Tea',    price:7.80,  emoji:'🧋', mochi:false },
+  'MM-CAKE-001':    { name:'Crater Cheesecake',  price:9.80,  emoji:'🍰', mochi:false }
 };
 
 var cart = [];          // [{ id, name, price, qty }]

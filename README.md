@@ -83,12 +83,15 @@ double-counting on purpose.
 | Stardust Mochi Box | `MM-BOX-001` | S$18.80 |
 | Lunar Matcha | `MM-DRINK-001` | S$8.50 |
 | Comet Croffle | `MM-CROFFLE-001` | S$12.00 |
+| Aurora Mochi Ice Cream | `MM-ICE-001` | S$6.50 |
+| Meteor Milk Tea | `MM-DRINK-002` | S$7.80 |
+| Crater Cheesecake | `MM-CAKE-001` | S$9.80 |
 
 ---
 
 ## 3. The product catalogue
 
-`catalog.csv` is a Meta products feed for the three items, with the nine required columns:
+`catalog.csv` is a Meta products feed for the six items, with the nine required columns:
 `id`, `title`, `description`, `availability`, `condition`, `price`, `link`, `image_link`, `brand`.
 Upload it in Commerce Manager under **Catalog → Data Sources**, or point a scheduled feed at
 `https://forkymadspoon.github.io/moonmochi/catalog.csv`.
