@@ -110,6 +110,30 @@ editable sources are `img/src/<SKU>.svg`; regenerate a PNG after editing one wit
   --screenshot=img/MM-BOX-001.png --window-size=1024,1024 img/src/MM-BOX-001.svg
 ```
 
+### Language overrides
+
+`catalog-localized.csv` is a **language override feed** for the same six items — Simplified
+Chinese and Malay. An override feed does not repeat the whole product; it carries `id`, an
+`override` column naming the locale, and only the fields that differ:
+
+```
+id,override,title,description
+MM-BOX-001,zh_CN,星尘麻糬礼盒,六颗手工麻糬，草莓、抹茶与黑芝麻口味。
+MM-BOX-001,ms_MY,Kotak Mochi Debu Bintang,Enam mochi buatan tangan...
+```
+
+Upload it in Commerce Manager as a **Language feed** attached to the same catalogue, *after*
+`catalog.csv` has ingested — an override row for an `id` the catalogue doesn't have is dropped.
+Everything not overridden (price, link, image, brand, availability) is inherited from the
+primary feed, so all locales share one SGD price and one landing page.
+
+Only `title` and `description` are localised. `link` deliberately is not: the site has no
+translated pages, and pointing a locale at an English page it claims is localised is worse than
+inheriting. If the menu copy is ever translated, add a `link` column here.
+
+Locale codes are `zh_CN` and `ms_MY`. Confirm both appear in Commerce Manager's supported list
+when you upload — an unrecognised locale fails the whole feed, not just its rows.
+
 > Fictional products are fine for a catalogue used to test Dynamic Ads. Don't take this one
 > through Commerce Manager's shop/checkout setup — that goes to commerce review, which expects
 > genuinely purchasable items.
