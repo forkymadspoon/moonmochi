@@ -65,12 +65,16 @@ a click handler in the `WIRING` section below.
 | Event | Type | Fires when | Parameters |
 |---|---|---|---|
 | `PageView` | standard | page load, from the base code | — |
-| `ViewContent` | standard | "Explore the menu" · landing on a `#MM-...` link · test button | `content_name`, `content_category`, `content_ids`, `content_type`, `value`, `currency` |
+| `ViewContent` | standard | a product card scrolls into view · landing on a `#MM-...` link · test button | `content_name`, `content_category`, `content_ids`, `content_type`, `value`, `currency` |
 | `AddToCart` | standard | any "Add to orbit" · test button | `content_name`, `content_ids`, `content_type`, `value`, `currency` |
 | `Lead` | standard | Moon Club signup · test button | `content_name`, `method` |
 | `InitiateCheckout` | standard | "Begin checkout" with ≥1 item · test button | `contents`, `content_type`, `num_items`, `value`, `currency` |
 | `Purchase` | standard | confirming the fictional checkout · test button | `contents`, `content_type`, `value`, `currency` |
 | `MochiFlavorSelected` | **custom** | a mochi product added to cart · test button | `flavor`, `source` |
+
+`ViewContent` reports each product once per page load, whichever way it is seen: an
+`IntersectionObserver` fires it when a card is at least half on screen, and a `#MM-...` landing
+reports that product immediately. A `viewed` map keeps the two from double-counting.
 
 `Purchase` in the checkout flow is guarded so it fires once per order. The **Purchase** test button
 is not guarded — repeated clicks send repeated events, which is useful for reproducing
@@ -123,16 +127,22 @@ MM-BOX-001,ms_MY,Kotak Mochi Debu Bintang,Enam mochi buatan tangan...
 ```
 
 Upload it in Commerce Manager as a **Language feed** attached to the same catalogue, *after*
-`catalog.csv` has ingested — an override row for an `id` the catalogue doesn't have is dropped.
-Everything not overridden (price, link, image, brand, availability) is inherited from the
-primary feed, so all locales share one SGD price and one landing page.
+`catalog.csv` has ingested. Everything not overridden (price, link, image, brand, availability)
+is inherited from the primary feed, so all locales share one SGD price and one landing page.
+
+> **It must be added as a Language feed, not a Country feed.** The two types validate the
+> `override` column differently: a language feed wants a `language_COUNTRY` locale (`zh_CN`), a
+> country feed wants a bare 2-letter ISO country code (`MY`). Choosing Country here rejects every
+> row with *"Use ISO codes for country overrides or locales for language overrides…"*.
+
+Note that price, sale_price, availability and status can **only** be overridden in a country
+feed, never a language feed — which is the other half of why the two types are distinct.
 
 Only `title` and `description` are localised. `link` deliberately is not: the site has no
 translated pages, and pointing a locale at an English page it claims is localised is worse than
 inheriting. If the menu copy is ever translated, add a `link` column here.
 
-Locale codes are `zh_CN` and `ms_MY`. Confirm both appear in Commerce Manager's supported list
-when you upload — an unrecognised locale fails the whole feed, not just its rows.
+Locale codes here are `zh_CN` and `ms_MY`, in Meta's documented `language_COUNTRY` form.
 
 > Fictional products are fine for a catalogue used to test Dynamic Ads. Don't take this one
 > through Commerce Manager's shop/checkout setup — that goes to commerce review, which expects

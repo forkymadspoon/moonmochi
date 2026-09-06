@@ -653,13 +653,34 @@ document.querySelectorAll('[data-add]').forEach(function (btn) {
   btn.addEventListener('click', function () { addToCart(btn.getAttribute('data-add')); });
 });
 
-/* Catalog links land on #MM-... — fire ViewContent for that product on arrival. */
+/* ViewContent — at most one per product per page load, whichever way it is seen. */
+var viewed = {};
+function viewProduct(id) {
+  if (!(id in PRODUCTS) || viewed[id]) { return; }
+  viewed[id] = true;
+  eventViewContent(id);
+}
+
+/* Catalog links land on #MM-... — report that product straight away. */
 if ((location.hash || '').slice(1) in PRODUCTS) {
-  eventViewContent(productFromHash());
+  viewProduct(productFromHash());
+}
+
+/* Otherwise a product counts as viewed once its card is genuinely on screen. */
+if (window.IntersectionObserver) {
+  var cardObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) { return; }
+      viewProduct(e.target.id);
+      cardObserver.unobserve(e.target);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.card[id^="MM-"]').forEach(function (card) {
+    cardObserver.observe(card);
+  });
 }
 
 $('exploreBtn').addEventListener('click', function () {
-  eventViewContent(productFromHash());
   $('menu').scrollIntoView({ behavior: 'smooth' });
 });
 
