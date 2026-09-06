@@ -1,0 +1,9 @@
+# Required | A unique content ID for the product. Use the product's SKU if you can. Each content ID must only appear once in your catalogue. To run dynamic ads; this ID must exactly match the content ID for the same product in your Meta pixel code. Character limit: 100,# Required | Language code. Supported codes: https://www.facebook.com/business/help/2144286692311411,# Optional | A specific and relevant title for the product. See title specifications: https://www.facebook.com/business/help/2104231189874655 Character limit: 150,# Optional | A short and relevant description of the product. Include specific or unique product features; such as material or colour. Use plain text and don't enter text in all capital letters. See description specifications: https://www.facebook.com/business/help/2302017289821154 Character limit: 5;000
+id,override,title,description
+MM-CAKE-001,ms_MY,Kek Keju Kawah,Kek keju yuzu bakar bertaburan serbuk biskut hancur.
+MM-ICE-001,ms_MY,Aiskrim Mochi Aurora,Aiskrim berbalut mochi yang bertukar warna ketika cair.
+MM-DRINK-001,ms_MY,Matcha Purnama,Matcha gred upacara dengan buih bulan strawberi.
+MM-CROFFLE-001,ms_MY,Croffle Komet,Croffle mochi dengan krim nebula vanila dan buah-buahan.
+MM-DRINK-002,ms_MY,Teh Susu Meteor,Teh susu gula perang dengan mutiara yang meluncur ke dasar.
+MM-BOX-001,ms_MY,Kotak Mochi Debu Bintang,"Enam mochi buatan tangan berperisa strawberi, matcha dan bijan hitam."
+moonmochi_matcha_latte,ms_MY,,

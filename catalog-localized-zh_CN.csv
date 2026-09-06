@@ -1,0 +1,9 @@
+# Required | A unique content ID for the product. Use the product's SKU if you can. Each content ID must only appear once in your catalogue. To run dynamic ads; this ID must exactly match the content ID for the same product in your Meta pixel code. Character limit: 100,# Required | Language code. Supported codes: https://www.facebook.com/business/help/2144286692311411,# Optional | A specific and relevant title for the product. See title specifications: https://www.facebook.com/business/help/2104231189874655 Character limit: 150,# Optional | A short and relevant description of the product. Include specific or unique product features; such as material or colour. Use plain text and don't enter text in all capital letters. See description specifications: https://www.facebook.com/business/help/2302017289821154 Character limit: 5;000
+id,override,title,description
+MM-CAKE-001,zh_CN,陨石坑芝士蛋糕,香柚烤芝士蛋糕，撒上酥饼碎屑。
+MM-ICE-001,zh_CN,极光麻糬冰淇淋,麻糬包裹的冰淇淋，融化时色彩流转。
+MM-DRINK-001,zh_CN,月光抹茶,仪式级抹茶，佐以草莓月色奶盖。
+MM-CROFFLE-001,zh_CN,彗星可颂松饼,麻糬可颂松饼，佐香草星云奶油与鲜果。
+MM-DRINK-002,zh_CN,流星黑糖奶茶,黑糖奶茶，珍珠如流星般沉入杯底。
+MM-BOX-001,zh_CN,星尘麻糬礼盒,六颗手工麻糬，草莓、抹茶与黑芝麻口味。
+moonmochi_matcha_latte,zh_CN,,

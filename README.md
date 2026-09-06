@@ -116,33 +116,43 @@ editable sources are `img/src/<SKU>.svg`; regenerate a PNG after editing one wit
 
 ### Language overrides
 
-`catalog-localized.csv` is a **language override feed** for the same six items — Simplified
-Chinese and Malay. An override feed does not repeat the whole product; it carries `id`, an
-`override` column naming the locale, and only the fields that differ:
+Language localisation is **one feed per locale**, built from the templates Commerce Manager
+generates for the catalogue (Catalog → Data Sources → language feed → download template):
+
+| File | Locale |
+|---|---|
+| `catalog-localized-zh_CN.csv` | Simplified Chinese |
+| `catalog-localized-ms_MY.csv` | Malay |
+
+Each keeps Meta's own layout — the `#` specification row, then `id,override,title,description`,
+then one row per catalogue item in the template's order. An override feed doesn't repeat the
+whole product, only the fields that differ:
 
 ```
 id,override,title,description
 MM-BOX-001,zh_CN,星尘麻糬礼盒,六颗手工麻糬，草莓、抹茶与黑芝麻口味。
-MM-BOX-001,ms_MY,Kotak Mochi Debu Bintang,Enam mochi buatan tangan...
 ```
 
-Upload it in Commerce Manager as a **Language feed** attached to the same catalogue, *after*
-`catalog.csv` has ingested. Everything not overridden (price, link, image, brand, availability)
-is inherited from the primary feed, so all locales share one SGD price and one landing page.
+A blank cell means *inherit from the primary feed*, so price, link, image, brand and
+availability all come from `catalog.csv` and every locale shares one SGD price and one landing
+page.
 
-> **It must be added as a Language feed, not a Country feed.** The two types validate the
-> `override` column differently: a language feed wants a `language_COUNTRY` locale (`zh_CN`), a
-> country feed wants a bare 2-letter ISO country code (`MY`). Choosing Country here rejects every
-> row with *"Use ISO codes for country overrides or locales for language overrides…"*.
+> **Add each file as a Language feed, not a Country feed.** The two types validate `override`
+> differently: a language feed wants a `language_COUNTRY` locale (`zh_CN`), a country feed wants
+> a bare 2-letter ISO country code (`MY`). Choosing Country rejects every row with *"Use ISO
+> codes for country overrides or locales for language overrides…"*.
 
 Note that price, sale_price, availability and status can **only** be overridden in a country
 feed, never a language feed — which is the other half of why the two types are distinct.
 
 Only `title` and `description` are localised. `link` deliberately is not: the site has no
-translated pages, and pointing a locale at an English page it claims is localised is worse than
-inheriting. If the menu copy is ever translated, add a `link` column here.
+translated pages, so a locale-specific URL would lead to English copy anyway. If the menu copy
+is ever translated, add a `link` column.
 
-Locale codes here are `zh_CN` and `ms_MY`, in Meta's documented `language_COUNTRY` form.
+**`moonmochi_matcha_latte`** appears in both templates, so it exists in the catalogue, but it is
+not in `catalog.csv` and the pixel never sends it as a `content_id`. It can therefore never
+match an interaction and only drags the catalogue match rate down. Its rows are left blank here;
+delete the item in Commerce Manager, or add it to the site and the primary feed.
 
 > Fictional products are fine for a catalogue used to test Dynamic Ads. Don't take this one
 > through Commerce Manager's shop/checkout setup — that goes to commerce review, which expects
