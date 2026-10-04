@@ -68,8 +68,8 @@ a click handler in the `WIRING` section below.
 | `ViewContent` | standard | a product card scrolls into view · landing on a `#MM-...` link · test button | `content_name`, `content_category`, `content_ids`, `content_type`, `value`, `currency` |
 | `AddToCart` | standard | any "Add to orbit" · test button | `content_name`, `content_ids`, `content_type`, `value`, `currency` |
 | `Lead` | standard | Moon Club signup · test button | `content_name`, `method` |
-| `InitiateCheckout` | standard | "Begin checkout" with ≥1 item · test button | `contents`, `content_type`, `num_items`, `value`, `currency` |
-| `Purchase` | standard | confirming the fictional checkout · test button | `contents`, `content_type`, `value`, `currency` |
+| `InitiateCheckout` | standard | "Begin checkout" with ≥1 item · test button | `contents`, `content_ids`, `content_type`, `num_items`, `value`, `currency` |
+| `Purchase` | standard | confirming the fictional checkout · test button | `contents`, `content_ids`, `content_type`, `value`, `currency` |
 | `MochiFlavorSelected` | **custom** | a mochi product added to cart · test button | `flavor`, `source` |
 
 `ViewContent` reports each product once per page load, whichever way it is seen: an
@@ -149,10 +149,10 @@ Only `title` and `description` are localised. `link` deliberately is not: the si
 translated pages, so a locale-specific URL would lead to English copy anyway. If the menu copy
 is ever translated, add a `link` column.
 
-**`moonmochi_matcha_latte`** appears in both templates, so it exists in the catalogue, but it is
-not in `catalog.csv` and the pixel never sends it as a `content_id`. It can therefore never
-match an interaction and only drags the catalogue match rate down. Its rows are left blank here;
-delete the item in Commerce Manager, or add it to the site and the primary feed.
+If a regenerated template ever contains an `id` that is not in `catalog.csv`, that item exists
+in the catalogue but not on the site — the pixel never sends it as a `content_id`, so it cannot
+match an interaction and only drags the catalogue match rate down. Delete it in Commerce Manager
+rather than carrying it here. (`moonmochi_matcha_latte` was one such stray, removed.)
 
 > Fictional products are fine for a catalogue used to test Dynamic Ads. Don't take this one
 > through Commerce Manager's shop/checkout setup — that goes to commerce review, which expects

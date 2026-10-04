@@ -527,6 +527,7 @@ function eventInitiateCheckout(contents, numItems, value) {
   var eventId = newEventId();
   var params = {
     contents: contents,
+    content_ids: contents.map(function (c) { return c.id; }),
     content_type: 'product',
     num_items: numItems,
     value: value,
@@ -541,6 +542,7 @@ function eventPurchase(contents, value) {
   var eventId = newEventId();
   var params = {
     contents: contents,
+    content_ids: contents.map(function (c) { return c.id; }),
     content_type: 'product',
     value: value,
     currency: 'SGD'
